@@ -62,14 +62,14 @@ func TestFilter(t *testing.T) {
 	}
 }
 
-// TestFindLastOccurenceIn calls slicesutil.FindLastOccurenceIn,
+// TestFindLastOccurrenceIn calls slicesutil.FindLastOccurrenceIn,
 // checking for a valid return value.
-func TestFindLastOccurenceIn(t *testing.T) {
+func TestFindLastOccurrenceIn(t *testing.T) {
 	_s := SliceS{"one", "three", "nine", "two"}
-	if r := _s.FindLastOccurenceIn(SliceS{"nine", "one"}); r != "nine" {
+	if r := _s.FindLastOccurrenceIn(SliceS{"nine", "one"}); r != "nine" {
 		t.Fatalf(`result: {%s} but expected: {%v}`, r, "nine")
 	}
-	if r := _s.FindLastOccurenceIn(SliceS{"seven"}); r != "" {
+	if r := _s.FindLastOccurrenceIn(SliceS{"seven"}); r != "" {
 		t.Fatalf(`result: {%s} but expected: {%v}`, r, "")
 	}
 }

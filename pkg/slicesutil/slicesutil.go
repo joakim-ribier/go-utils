@@ -32,11 +32,11 @@ func (s SliceS) Filter(is func(string) bool) SliceS {
 	return FilterT(s, is)
 }
 
-// FindLastOccurenceIn finds last occurence in slice of slice {to},
+// FindLastOccurrenceIn finds last occurrence in slice of slice {to},
 //
-// returns empty if no occurence found.
-func (s SliceS) FindLastOccurenceIn(to []string) string {
-	return FindLastOccurenceIn(s, to)
+// returns empty if no occurrence found.
+func (s SliceS) FindLastOccurrenceIn(to []string) string {
+	return FindLastOccurrenceIn(s, to)
 }
 
 // FindNextEl finds the next element after the value {in} in the slice.
@@ -63,10 +63,10 @@ func Exist(s []string, v string) bool {
 	return ExistT(s, func(el string) bool { return strings.EqualFold(el, v) })
 }
 
-// FindLastOccurenceIn finds last occurence in the slice {from} of the slice {to},
+// FindLastOccurrenceIn finds last occurrence in the slice {from} of the slice {to},
 //
-// returns empty if no occurence found.
-func FindLastOccurenceIn(from, to []string) string {
+// returns empty if no occurrence found.
+func FindLastOccurrenceIn(from, to []string) string {
 	s := Clone(from)
 	slices.Reverse(s)
 
