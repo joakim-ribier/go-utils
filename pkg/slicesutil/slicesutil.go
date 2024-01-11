@@ -132,13 +132,20 @@ func FilterT[T any](in []T, is func(T) bool) []T {
 	return out
 }
 
-// Transform transforms the slice {from} []F to the slice []T using the provider {transform} function.
-func Transform[F any, T any](from []F, transorm func(F) (T, error)) []T {
+// Transform transforms the slice {from} []F to the slice []T using the provided {transform} function.
+func Transform[F any, T any](from []F, transorm func(F) (*T, error)) []T {
 	var to []T
 	for _, el := range from {
 		if v, err := transorm(el); err == nil {
-			to = append(to, v)
+			to = append(to, *v)
 		}
 	}
 	return to
+}
+
+// ToString concatenates the slice {in} to a single string using the provided {transform} function.
+func ToString[T any](in []T, transorm func(T) *string, separator string) string {
+	return strings.Join(Transform[T, string](in, func(t T) (*string, error) {
+		return transorm(t), nil
+	}), separator)
 }
