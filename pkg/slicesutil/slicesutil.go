@@ -116,12 +116,12 @@ func Clone[T any](s []T) []T {
 	return append([]T{}, s...)
 }
 
-// Exist returns bool using the provided equal function.
+// ExistT returns bool using the provided equal function.
 func ExistT[T any](s []T, equal func(T) bool) bool {
 	return slices.IndexFunc(s, func(el T) bool { return equal(el) }) != -1
 }
 
-// Filter filters the slice in using the provided is function.
+// FilterT filters the slice in using the provided is function.
 func FilterT[T any](in []T, is func(T) bool) []T {
 	var out []T
 	for _, v := range in {
@@ -132,11 +132,20 @@ func FilterT[T any](in []T, is func(T) bool) []T {
 	return out
 }
 
+// FindT finds the first occurrence in the slice in using the provided is function.
+func FindT[T any](in []T, is func(T) bool) *T {
+	if out := FilterT[T](in, is); len(out) > 0 {
+		return &out[0]
+	} else {
+		return nil
+	}
+}
+
 // Transform transforms the slice {from} []F to the slice []T using the provided {transform} function.
-func Transform[F any, T any](from []F, transorm func(F) (*T, error)) []T {
+func Transform[F any, T any](from []F, transform func(F) (*T, error)) []T {
 	var to []T
 	for _, el := range from {
-		if v, err := transorm(el); err == nil {
+		if v, err := transform(el); err == nil {
 			to = append(to, *v)
 		}
 	}
@@ -144,8 +153,8 @@ func Transform[F any, T any](from []F, transorm func(F) (*T, error)) []T {
 }
 
 // ToString concatenates the slice {in} to a single string using the provided {transform} function.
-func ToString[T any](in []T, transorm func(T) *string, separator string) string {
+func ToString[T any](in []T, transform func(T) *string, separator string) string {
 	return strings.Join(Transform[T, string](in, func(t T) (*string, error) {
-		return transorm(t), nil
+		return transform(t), nil
 	}), separator)
 }
