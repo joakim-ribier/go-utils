@@ -32,6 +32,11 @@ func (s SliceS) Filter(is func(string) bool) SliceS {
 	return FilterT(s, is)
 }
 
+// FilterByNonEmpty removes all empty values in the slice {in}.
+func (s SliceS) FilterByNonEmpty() SliceS {
+	return FilterByNonEmpty(s)
+}
+
 // FindLastOccurrenceIn finds last occurrence in slice of slice {to},
 //
 // returns empty if no occurrence found.
@@ -49,6 +54,11 @@ func (s SliceS) Sort() []string {
 	return Sort(s)
 }
 
+// ToMap transforms the slice {in} to a map key/value.
+func (s SliceS) ToMap() map[string]string {
+	return ToMap(s)
+}
+
 // ##
 // #### string functions ####
 // ##
@@ -61,6 +71,22 @@ func Append(from, to []string) []string {
 // Exist returns {true} if {v} value exists in the slice {s} (case-insensitive).
 func Exist(s []string, v string) bool {
 	return ExistT(s, func(el string) bool { return strings.EqualFold(el, v) })
+}
+
+// FilterByNonEmpty removes all empty values in the slice {in}.
+func FilterByNonEmpty(in []string) []string {
+	return FilterT(in, func(s string) bool { return strings.TrimSpace(s) != "" })
+}
+
+// ToMap transforms the slice {in} to a map key/value.
+func ToMap(in []string) map[string]string {
+	out := make(map[string]string)
+	for i := range in {
+		if len(in) > i*2+1 {
+			out[in[i*2]] = in[i*2+1]
+		}
+	}
+	return out
 }
 
 // FindLastOccurrenceIn finds last occurrence in the slice {from} of the slice {to},

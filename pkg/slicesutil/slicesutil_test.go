@@ -62,6 +62,17 @@ func TestFilter(t *testing.T) {
 	}
 }
 
+// TestFilterByNonEmpty calls slicesutil.FilterByNonEmpty,
+// checking for a valid return value.
+func TestFilterByNonEmpty(t *testing.T) {
+	_s := SliceS{"", "", "", "two"}
+	r := _s.FilterByNonEmpty()
+
+	if len(r) != 1 || r[0] != "two" {
+		t.Fatalf(`result: {%s} but expected: {%v}`, r, "two")
+	}
+}
+
 // TestFindLastOccurrenceIn calls slicesutil.FindLastOccurrenceIn,
 // checking for a valid return value.
 func TestFindLastOccurrenceIn(t *testing.T) {
@@ -97,6 +108,17 @@ func TestSort(t *testing.T) {
 	}
 	if r[len(_s)-1] != "two" {
 		t.Fatalf(`result: {%s} but expected: {%v}`, r, "two")
+	}
+}
+
+// TestToMap calls slicesutil.ToMap,
+// checking for a valid return value.
+func TestToMap(t *testing.T) {
+	_s := SliceS{"one", "1", "two", "2"}
+	r := _s.ToMap()
+
+	if len(r) != 2 || r["one"] != "1" || r["two"] != "2" {
+		t.Fatalf(`result: {%s} but expected: {%v}`, r, map[string]string{"one": "1", "two": "2"})
 	}
 }
 
