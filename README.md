@@ -1,12 +1,11 @@
 # go-utils
-Library for Golang language
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/joakim-ribier/go-utils)](https://goreportcard.com/report/github.com/joakim-ribier/go-utils)
 ![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)
 [![Go Reference](https://pkg.go.dev/badge/image)](https://pkg.go.dev/github.com/joakim-ribier/go-utils)
 [![codecov](https://codecov.io/gh/joakim-ribier/go-utils/graph/badge.svg?token=AUAOC8992T)](https://codecov.io/gh/joakim-ribier/go-utils)
 
-Utility functions on slices, json and http golang packages.
+Go library that provides utilities functions to manipulate slices type, json serialization, io, and http calls.
 
 ## Usage
 

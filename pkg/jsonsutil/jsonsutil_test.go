@@ -1,22 +1,12 @@
 package jsonsutil
 
 import (
-	"os"
 	"testing"
 )
 
 type UserTestMock struct {
 	Age  int
 	Name string
-}
-
-// TestUnmarshalWithBadJson calls jsonsutil.Unmarshal,
-// checking for a valid return value.
-func TestLoadFWithBadFilename(t *testing.T) {
-	r, err := LoadF[UserTestMock]("file-does-not-exist.json")
-	if err == nil {
-		t.Fatalf(`result: {%v} but expected error`, r)
-	}
 }
 
 // TestUnmarshalWithBadJson calls jsonsutil.Unmarshal,
@@ -41,19 +31,26 @@ func TestUnmarshal(t *testing.T) {
 	}
 }
 
-// TestWriteTAndLoadF calls jsonsutil.WriteT and jsonsutil.LoadF,
+// TestMarshal calls jsonsutil.Marshal,
 // checking for a valid return value.
-func TestWriteTAndLoadF(t *testing.T) {
+func TestMarshal(t *testing.T) {
 	user := UserTestMock{Age: 18, Name: "Bob"}
-	if err := WriteT(user, "users.json"); err != nil {
+	if bytes, err := Marshal(user); err != nil {
 		t.Fatal(err)
-	}
-	if r, err := LoadF[UserTestMock]("users.json"); err == nil {
-		if r != user {
-			t.Fatalf(`result: {%v} but expected: {%v}`, r, user)
-		}
-		os.Remove("users.json")
 	} else {
-		t.Fatal(err)
+		if string(bytes) != `{"Age":18,"Name":"Bob"}` {
+			t.Fatalf(`result: {%v} but expected: {%v}`, string(bytes), `{"Age":18,"Name":"Bob"}`)
+		}
+	}
+}
+
+// TestMarshalError calls jsonsutil.Marshal,
+// checking for a valid return value.
+func TestMarshalError(t *testing.T) {
+	hello := func() string {
+		return "Hello Word"
+	}
+	if bytes, err := Marshal(hello); err == nil {
+		t.Fatalf(`result: {%v} but expected UnsupportedTypeError`, bytes)
 	}
 }

@@ -171,9 +171,13 @@ func TestFindT(t *testing.T) {
 	_1 := []UserTestMock{{Name: "N-1", Age: 1}, {Name: "N-2", Age: 2}, {Name: "N-3", Age: 2}}
 
 	r := FindT(_1, func(arg0 UserTestMock) bool { return arg0.Age == 1 })
-
 	if r.Name != "N-1" {
 		t.Fatalf(`result: {%v} but expected: {%v}`, r, []UserTestMock{{Name: "N-1", Age: 1}})
+	}
+
+	r = FindT(_1, func(arg0 UserTestMock) bool { return arg0.Age == 99 })
+	if r != nil {
+		t.Fatalf(`result: {%v} but expected: {%v}`, r, "nil")
 	}
 }
 
