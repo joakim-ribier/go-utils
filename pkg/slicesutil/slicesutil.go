@@ -19,7 +19,7 @@ func (s SliceS) Append(to []string) []string {
 
 // Clone creates a new copy of slice.
 func (s SliceS) Clone() []string {
-	return Clone(s)
+	return CloneT(s)
 }
 
 // Exist returns true if {v} value exists in slice (case-insensitive).
@@ -93,7 +93,7 @@ func ToMap(in []string) map[string]string {
 //
 // returns empty if no occurrence found.
 func FindLastOccurrenceIn(from, to []string) string {
-	s := Clone(from)
+	s := CloneT(from)
 	slices.Reverse(s)
 
 	for _, v := range s {
@@ -126,9 +126,21 @@ func Sort(s []string) []string {
 // #### generic functions ####
 // ##
 
+// AddOrReplaceT adds or replaces {t} in the slice {in} using the provided {is} function.
+func AddOrReplaceT[T any](in []T, t T, is func(T) bool) []T {
+	var out []T
+	for _, v := range in {
+		if !is(v) {
+			out = append(out, v)
+		}
+	}
+	out = append(out, t)
+	return out
+}
+
 // Append appends the slice {to} into the slice {from} without duplicated values using the provided {exist} function.
 func AppendT[T any](from, to []T, exist func(T, T) bool) []T {
-	s := Clone(from)
+	s := CloneT(from)
 	for _, t := range to {
 		if !ExistT(s, func(el T) bool { return exist(el, t) }) {
 			s = append(s, t)
@@ -137,8 +149,8 @@ func AppendT[T any](from, to []T, exist func(T, T) bool) []T {
 	return s
 }
 
-// Clone creates new copy of the slice {s}.
-func Clone[T any](s []T) []T {
+// CloneT creates new copy of the slice {s}.
+func CloneT[T any](s []T) []T {
 	return append([]T{}, s...)
 }
 
@@ -167,8 +179,17 @@ func FindT[T any](in []T, is func(T) bool) *T {
 	}
 }
 
-// Transform transforms the slice {from} []F to the slice []T using the provided {transform} function.
-func Transform[F any, T any](from []F, transform func(F) (*T, error)) []T {
+// SortT creates a copy and sorts the slice {s} using the provided {less} function.
+func SortT[T any](s []T, less func(T, T) bool) []T {
+	var out = CloneT(s)
+	sort.SliceStable(out, func(i, j int) bool {
+		return less(s[i], s[j])
+	})
+	return out
+}
+
+// TransformT transforms the slice {from} []F to the slice []T using the provided {transform} function.
+func TransformT[F any, T any](from []F, transform func(F) (*T, error)) []T {
 	var to []T
 	for _, el := range from {
 		if v, err := transform(el); err == nil {
@@ -180,7 +201,7 @@ func Transform[F any, T any](from []F, transform func(F) (*T, error)) []T {
 
 // ToString concatenates the slice {in} to a single string using the provided {transform} function.
 func ToString[T any](in []T, transform func(T) *string, separator string) string {
-	return strings.Join(Transform[T, string](in, func(t T) (*string, error) {
+	return strings.Join(TransformT[T, string](in, func(t T) (*string, error) {
 		return transform(t), nil
 	}), separator)
 }

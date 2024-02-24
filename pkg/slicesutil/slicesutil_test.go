@@ -126,6 +126,18 @@ func TestToMap(t *testing.T) {
 // #### generic functions ####
 // ##
 
+// TestAddOrReplaceT calls slicesutil.AddOrReplaceT,
+// checking for a valid return value.
+func TestAddOrReplaceT(t *testing.T) {
+	_1 := []UserTestMock{{Name: "N-1", Age: 1}, {Name: "N-2", Age: 2}}
+
+	r := AddOrReplaceT(_1, UserTestMock{Name: "N-2", Age: 22}, func(utm UserTestMock) bool { return utm.Name == "N-2" })
+
+	if len(r) != 2 || !ExistT(r, func(utm UserTestMock) bool { return utm.Name == "N-2" && utm.Age == 22 }) {
+		t.Fatalf(`result: {%v} but expected: {%v}`, r, []UserTestMock{{Name: "N-1", Age: 1}, {Name: "N-2", Age: 22}})
+	}
+}
+
 // TestAppendT calls slicesutil.AppendT,
 // checking for a valid return value.
 func TestAppendT(t *testing.T) {
@@ -181,12 +193,24 @@ func TestFindT(t *testing.T) {
 	}
 }
 
-// TestTransform calls slicesutil.TestTransform,
+// TestSortT calls slicesutil.SortT,
 // checking for a valid return value.
-func TestTransform(t *testing.T) {
+func TestSortT(t *testing.T) {
+	_1 := []UserTestMock{{Name: "N-1", Age: 1}, {Name: "N-2", Age: 2}, {Name: "N-3", Age: 6}}
+
+	r := SortT(_1, func(utm1, utm2 UserTestMock) bool { return utm1.Age > utm2.Age })
+	if _1[0].Age != 1 || r[0].Age != 6 || r[1].Age != 2 {
+		t.Fatalf(`result: {%v} but expected: {%v}`, r,
+			[]UserTestMock{{Name: "N-3", Age: 6}, {Name: "N-2", Age: 2}, {Name: "N-1", Age: 1}})
+	}
+}
+
+// TestTransformT calls slicesutil.TransformT,
+// checking for a valid return value.
+func TestTransformT(t *testing.T) {
 	_s := SliceS{"1", "2", "3", "4", "wrong-value"}
 
-	r := Transform[string, int](_s, func(s string) (*int, error) {
+	r := TransformT[string, int](_s, func(s string) (*int, error) {
 		v, err := strconv.Atoi(s)
 		return &v, err
 	})
