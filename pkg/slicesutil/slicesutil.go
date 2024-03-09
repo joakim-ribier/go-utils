@@ -170,7 +170,7 @@ func FilterT[T any](in []T, is func(T) bool) []T {
 	return out
 }
 
-// FindT finds the first occurrence in the slice in using the provided is function.
+// FindT finds the first occurrence in the slice in using the provided {is} function.
 func FindT[T any](in []T, is func(T) bool) *T {
 	if out := FilterT[T](in, is); len(out) > 0 {
 		return &out[0]
@@ -179,7 +179,7 @@ func FindT[T any](in []T, is func(T) bool) *T {
 	}
 }
 
-// SortT creates a copy and sorts the slice {s} using the provided {less} function.
+// SortT clones and sorts the slice {s} using the provided {less} function.
 func SortT[T any](s []T, less func(T, T) bool) []T {
 	var out = CloneT(s)
 	sort.SliceStable(out, func(i, j int) bool {
@@ -192,7 +192,7 @@ func SortT[T any](s []T, less func(T, T) bool) []T {
 func TransformT[F any, T any](from []F, transform func(F) (*T, error)) []T {
 	var to []T
 	for _, el := range from {
-		if v, err := transform(el); err == nil {
+		if v, err := transform(el); err == nil && v != nil {
 			to = append(to, *v)
 		}
 	}
@@ -200,7 +200,7 @@ func TransformT[F any, T any](from []F, transform func(F) (*T, error)) []T {
 }
 
 // ToString concatenates the slice {in} to a single string using the provided {transform} function.
-func ToString[T any](in []T, transform func(T) *string, separator string) string {
+func ToStringT[T any](in []T, transform func(T) *string, separator string) string {
 	return strings.Join(TransformT[T, string](in, func(t T) (*string, error) {
 		return transform(t), nil
 	}), separator)

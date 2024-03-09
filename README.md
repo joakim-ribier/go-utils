@@ -15,6 +15,27 @@ Run `$ go get github.com/joakim-ribier/go-utils` to add this library on your pro
 
 Otherwise, you can download it and start `$ go build ./...` to work on.
 
+### slicesutil
+
+```go
+// []User --> []User
+slicesutil.FilterT[User](users, func(u User) bool {
+	return u.Age > 17
+})
+
+// []User --> *User
+slicesutil.FindT[User](users, func(u User) bool {
+	return u.Age == 2
+})
+
+// []User --> []string
+slicesutil.TransformT[User, string](users, func(u User) (*string, error) {
+	return &u.Name, nil
+})
+````
+
+Find more examples on the [README.md (pkg/slicesutil)](pkg/slicesutil/README.md).
+
 ## Projects using `go-utils`
 
 * [CLI for Postman](https://github.com/joakim-ribier/go-cli-4Postman)

@@ -218,14 +218,15 @@ func TestTransformT(t *testing.T) {
 	if r[0] != 1 || len(r) != 4 {
 		t.Fatalf(`result: {%v} but expected: {%v}`, r, []int{1, 2, 3, 4})
 	}
+
 }
 
 // TestToString calls slicesutil.ToString,
 // checking for a valid return value.
-func TestToString(t *testing.T) {
+func TestToStringT(t *testing.T) {
 	_1 := []UserTestMock{{Name: "N-1", Age: 1}, {Name: "N-2", Age: 2}, {Name: "N-3", Age: 2}}
 
-	r := ToString[UserTestMock](_1, func(u UserTestMock) *string { return &u.Name }, "#")
+	r := ToStringT[UserTestMock](_1, func(u UserTestMock) *string { return &u.Name }, "#")
 
 	expected := "N-1#N-2#N-3"
 	if r != expected {
