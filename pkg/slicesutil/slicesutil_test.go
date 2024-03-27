@@ -7,8 +7,9 @@ import (
 )
 
 type UserTestMock struct {
-	Age  int
-	Name string
+	Age     int
+	Name    string
+	Hobbies []string
 }
 
 // ##
@@ -19,7 +20,7 @@ type UserTestMock struct {
 // checking for a valid return value.
 func TestAppend(t *testing.T) {
 	_s := SliceS{"one", "three", "nine", "two"}
-	r := _s.Append(SliceS{"one", "four"})
+	r := _s.Append(SliceS{"one", "four", "four"})
 
 	if len(r) != 5 || r[len(r)-1] != "four" {
 		t.Fatalf(`result: {%s} but expected: {%s}`, r, SliceS{"one", "three", "nine", "two", "four"})
@@ -36,6 +37,18 @@ func TestClone(t *testing.T) {
 
 	if len(_s) != len(r) || _s[0] == r[0] {
 		t.Fatalf(`result: {%s} but expected: {%s}`, r, _s)
+	}
+}
+
+// TestDistinct calls slicesutil.Distinct,
+// checking for a valid return value.
+func TestDistinct(t *testing.T) {
+	_s := SliceS{"one", "two", "three", "four", "one", "four"}
+
+	r := _s.Distinct()
+
+	if len(r) != 4 || !Must(r, SliceS{"one", "two", "three", "four"}) {
+		t.Fatalf(`result: {%s} but expected: {%s}`, r, SliceS{"one", "two", "three", "four"})
 	}
 }
 
@@ -123,6 +136,54 @@ func TestToMap(t *testing.T) {
 }
 
 // ##
+// #### string functions ####
+// ##
+
+// TestContainAll calls slicesutil.ContainAll,
+// checking for a valid return value.
+func TestContainAll(t *testing.T) {
+	_s1 := []string{"one", "three", "four", "two"}
+	_s2 := []string{"three", "one", "two", "four", "five"}
+	if !ContainAll(_s1, _s2) {
+		t.Fatalf(`result: {false} but expected: {true}`)
+	}
+	if ContainAll(_s2, _s1) {
+		t.Fatalf(`result: {true} but expected: {false}`)
+	}
+}
+
+// TestEqual calls slicesutil.Equal,
+// checking for a valid return value.
+func TestEqual(t *testing.T) {
+	_s1 := []string{"one", "three", "four", "two"}
+	_s2 := []string{"three", "one", "two", "four"}
+	if !Equal(_s1, _s2) {
+		t.Fatalf(`result: {false} but expected: {true}`)
+	}
+	if Equal([]string{"one", "one"}, []string{"one", "two"}) {
+		t.Fatalf(`result: {true} but expected: {false}`)
+	}
+	if Equal(_s1, append(_s2, "five")) {
+		t.Fatalf(`result: {true} but expected: {false}`)
+	}
+}
+
+// TestMust calls slicesutil.Must,
+// checking for a valid return value.
+func TestMust(t *testing.T) {
+	_s1 := []string{"one", "two", "three", "four"}
+	if !Must(_s1, slices.Clone(_s1)) {
+		t.Fatalf(`result: {false} but expected: {true}`)
+	}
+	if Must(_s1, []string{"three", "one", "two", "four"}) {
+		t.Fatalf(`result: {true} but expected: {false}`)
+	}
+	if Must(_s1, append(_s1, "five")) {
+		t.Fatalf(`result: {true} but expected: {false}`)
+	}
+}
+
+// ##
 // #### generic functions ####
 // ##
 
@@ -193,6 +254,23 @@ func TestFindT(t *testing.T) {
 	}
 }
 
+// TestTransformT calls slicesutil.TransformT,
+// checking for a valid return value.
+func TestFlatTransformT(t *testing.T) {
+	_1 := []UserTestMock{
+		{Name: "N-1", Hobbies: []string{"playing chess", "coding"}},
+		{Name: "N-2", Hobbies: []string{"running", "sailing", "cooking", "coding"}},
+		{Name: "N-3"}}
+
+	r := FlatTransformT[UserTestMock, string](_1, func(utm UserTestMock) ([]string, error) {
+		return utm.Hobbies, nil
+	})
+
+	if len(r) != 6 {
+		t.Fatalf(`result: {%v} but expected: {%v}`, r, []string{"playing chess", "coding", "running", "sailing", "cooking", "coding"})
+	}
+}
+
 // TestSortT calls slicesutil.SortT,
 // checking for a valid return value.
 func TestSortT(t *testing.T) {
@@ -218,7 +296,6 @@ func TestTransformT(t *testing.T) {
 	if r[0] != 1 || len(r) != 4 {
 		t.Fatalf(`result: {%v} but expected: {%v}`, r, []int{1, 2, 3, 4})
 	}
-
 }
 
 // TestToString calls slicesutil.ToString,
