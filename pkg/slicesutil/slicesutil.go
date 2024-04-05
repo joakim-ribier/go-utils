@@ -6,66 +6,66 @@ import (
 	"strings"
 )
 
-type SliceS []string
+type sliceS []string
 
 // ##
 // #### SliceS type functions ####
 // ##
 
-// NewSliceS builds {SliceS} type from {in}.
-func NewSliceS(in []string) SliceS {
-	return append(SliceS{}, in...)
+// NewSliceS builds {sliceS} type from {in}.
+func NewSliceS(in []string) sliceS {
+	return append(sliceS{}, in...)
 }
 
 // Append appends the slice {to} into slice without duplicated values (case-insensitive).
-func (s SliceS) Append(to []string) SliceS {
+func (s sliceS) Append(to []string) sliceS {
 	return Append(s, to)
 }
 
 // Clone creates a new copy of slice.
-func (s SliceS) Clone() SliceS {
+func (s sliceS) Clone() sliceS {
 	return slices.Clone(s)
 }
 
 // Distinct removes duplicated values in the slice.
-func (s SliceS) Distinct() SliceS {
+func (s sliceS) Distinct() sliceS {
 	return Distinct(s)
 }
 
 // Exist returns true if {v} value exists in slice (case-insensitive).
-func (s SliceS) Exist(v string) bool {
+func (s sliceS) Exist(v string) bool {
 	return Exist(s, v)
 }
 
 // Filter filters slice using the provided {is} function.
-func (s SliceS) Filter(is func(string) bool) SliceS {
+func (s sliceS) Filter(is func(string) bool) sliceS {
 	return FilterT(s, is)
 }
 
 // FilterByNonEmpty removes all empty values in the slice {in}.
-func (s SliceS) FilterByNonEmpty() SliceS {
+func (s sliceS) FilterByNonEmpty() sliceS {
 	return FilterByNonEmpty(s)
 }
 
 // FindLastOccurrenceIn finds last occurrence in slice of slice {to},
 //
 // returns empty if no occurrence found.
-func (s SliceS) FindLastOccurrenceIn(to []string) string {
+func (s sliceS) FindLastOccurrenceIn(to []string) string {
 	return FindLastOccurrenceIn(s, to)
 }
 
 // FindNextEl finds the next element after the value {in} in the slice.
-func (s SliceS) FindNextEl(in string) string {
+func (s sliceS) FindNextEl(in string) string {
 	return FindNextEl(s, in)
 }
 
 // Sort sorts slice values.
-func (s SliceS) Sort() []string {
+func (s sliceS) Sort() []string {
 	return Sort(s)
 }
 
 // ToMap transforms the slice {in} to a map key/value.
-func (s SliceS) ToMap() map[string]string {
+func (s sliceS) ToMap() map[string]string {
 	return ToMap(s)
 }
 

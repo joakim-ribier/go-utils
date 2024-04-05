@@ -13,24 +13,24 @@ type UserTestMock struct {
 }
 
 // ##
-// #### SliceS type functions ####
+// #### sliceS type functions ####
 // ##
 
 // TestAppend calls slicesutil.Append,
 // checking for a valid return value.
 func TestAppend(t *testing.T) {
-	_s := SliceS{"one", "three", "nine", "two"}
-	r := _s.Append(SliceS{"one", "four", "four"})
+	_s := sliceS{"one", "three", "nine", "two"}
+	r := _s.Append(sliceS{"one", "four", "four"})
 
 	if len(r) != 5 || r[len(r)-1] != "four" {
-		t.Fatalf(`result: {%s} but expected: {%s}`, r, SliceS{"one", "three", "nine", "two", "four"})
+		t.Fatalf(`result: {%s} but expected: {%s}`, r, sliceS{"one", "three", "nine", "two", "four"})
 	}
 }
 
 // TestClone calls slicesutil.Clone,
 // checking for a valid return value.
 func TestClone(t *testing.T) {
-	_s := SliceS{"one", "three", "nine", "two"}
+	_s := sliceS{"one", "three", "nine", "two"}
 	r := _s.Clone()
 
 	slices.Reverse(_s)
@@ -43,19 +43,19 @@ func TestClone(t *testing.T) {
 // TestDistinct calls slicesutil.Distinct,
 // checking for a valid return value.
 func TestDistinct(t *testing.T) {
-	_s := SliceS{"one", "two", "three", "four", "one", "four"}
+	_s := sliceS{"one", "two", "three", "four", "one", "four"}
 
 	r := _s.Distinct()
 
-	if len(r) != 4 || !Must(r, SliceS{"one", "two", "three", "four"}) {
-		t.Fatalf(`result: {%s} but expected: {%s}`, r, SliceS{"one", "two", "three", "four"})
+	if len(r) != 4 || !Must(r, sliceS{"one", "two", "three", "four"}) {
+		t.Fatalf(`result: {%s} but expected: {%s}`, r, sliceS{"one", "two", "three", "four"})
 	}
 }
 
 // TestExist calls slicesutil.Exist,
 // checking for a valid return value.
 func TestExist(t *testing.T) {
-	_s := SliceS{"one", "three", "nine", "two"}
+	_s := sliceS{"one", "three", "nine", "two"}
 	if !_s.Exist("nine") {
 		t.Fatalf(`result: {%v} but expected: {%v}`, false, true)
 	}
@@ -67,18 +67,18 @@ func TestExist(t *testing.T) {
 // TestFilter calls slicesutil.Filter,
 // checking for a valid return value.
 func TestFilter(t *testing.T) {
-	_s := SliceS{"one", "three", "nine", "two"}
+	_s := sliceS{"one", "three", "nine", "two"}
 	r := _s.Filter(func(s string) bool { return s == "three" })
 
 	if len(r) != 1 || r[0] != "three" {
-		t.Fatalf(`result: {%s} but expected: {%v}`, r, SliceS{"three"})
+		t.Fatalf(`result: {%s} but expected: {%v}`, r, sliceS{"three"})
 	}
 }
 
 // TestFilterByNonEmpty calls slicesutil.FilterByNonEmpty,
 // checking for a valid return value.
 func TestFilterByNonEmpty(t *testing.T) {
-	_s := SliceS{"", "", "", "two"}
+	_s := sliceS{"", "", "", "two"}
 	r := _s.FilterByNonEmpty()
 
 	if len(r) != 1 || r[0] != "two" {
@@ -89,11 +89,11 @@ func TestFilterByNonEmpty(t *testing.T) {
 // TestFindLastOccurrenceIn calls slicesutil.FindLastOccurrenceIn,
 // checking for a valid return value.
 func TestFindLastOccurrenceIn(t *testing.T) {
-	_s := SliceS{"one", "three", "nine", "two"}
-	if r := _s.FindLastOccurrenceIn(SliceS{"nine", "one"}); r != "nine" {
+	_s := sliceS{"one", "three", "nine", "two"}
+	if r := _s.FindLastOccurrenceIn(sliceS{"nine", "one"}); r != "nine" {
 		t.Fatalf(`result: {%s} but expected: {%v}`, r, "nine")
 	}
-	if r := _s.FindLastOccurrenceIn(SliceS{"seven"}); r != "" {
+	if r := _s.FindLastOccurrenceIn(sliceS{"seven"}); r != "" {
 		t.Fatalf(`result: {%s} but expected: {%v}`, r, "")
 	}
 }
@@ -101,7 +101,7 @@ func TestFindLastOccurrenceIn(t *testing.T) {
 // TestFindNextEl calls slicesutil.FindNextEl,
 // checking for a valid return value.
 func TestFindNextEl(t *testing.T) {
-	_s := SliceS{"one", "three", "nine", "two"}
+	_s := sliceS{"one", "three", "nine", "two"}
 	if r := _s.FindNextEl("three"); r != "nine" {
 		t.Fatalf(`result: {%s} but expected: {%v}`, r, "nine")
 	}
@@ -113,7 +113,7 @@ func TestFindNextEl(t *testing.T) {
 // TestFindNextEl calls slicesutil.FindNextEl,
 // checking for a valid return value.
 func TestSort(t *testing.T) {
-	_s := SliceS{"one", "three", "nine", "two"}
+	_s := sliceS{"one", "three", "nine", "two"}
 	r := _s.Sort()
 
 	if r[0] != "nine" {
@@ -127,7 +127,7 @@ func TestSort(t *testing.T) {
 // TestToMap calls slicesutil.ToMap,
 // checking for a valid return value.
 func TestToMap(t *testing.T) {
-	_s := SliceS{"one", "1", "two", "2"}
+	_s := sliceS{"one", "1", "two", "2"}
 	r := _s.ToMap()
 
 	if len(r) != 2 || r["one"] != "1" || r["two"] != "2" {
@@ -286,7 +286,7 @@ func TestSortT(t *testing.T) {
 // TestTransformT calls slicesutil.TransformT,
 // checking for a valid return value.
 func TestTransformT(t *testing.T) {
-	_s := SliceS{"1", "2", "3", "4", "wrong-value"}
+	_s := sliceS{"1", "2", "3", "4", "wrong-value"}
 
 	r := TransformT[string, int](_s, func(s string) (*int, error) {
 		v, err := strconv.Atoi(s)
