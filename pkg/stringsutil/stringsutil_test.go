@@ -6,20 +6,39 @@ import (
 
 // TestAppend calls stringsutil.OrElse,
 // checking for a valid return value.
-func TestOrElse(t *testing.T) {
-	_r := NewStringS("Hello").OrElse("GoodBye")
-	if _r != "Hello" {
-		t.Fatalf(`result: {%s} but expected: {%s}`, _r, "Hello")
+func TestStringOrElse(t *testing.T) {
+	tcs := []struct {
+		name   string
+		value  string
+		orElse string
+		result string
+	}{
+		{
+			name:   "with value",
+			value:  "Hello",
+			orElse: "no-value",
+			result: "Hello",
+		},
+		{
+			name:   "with empty value",
+			value:  "",
+			orElse: "empty-value",
+			result: "empty-value",
+		},
+		{
+			name:   "with space value",
+			value:  "   ",
+			orElse: "empty-value",
+			result: "empty-value",
+		},
 	}
-
-	_r = NewStringS("").OrElse("GoodBye")
-	if _r != "GoodBye" {
-		t.Fatalf(`result: {%s} but expected: {%s}`, _r, "GoodBye")
-	}
-
-	_r = NewStringS("  ").OrElse("GoodBye")
-	if _r != "GoodBye" {
-		t.Fatalf(`result: {%s} but expected: {%s}`, _r, "GoodBye")
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			_r := NewStringS(tc.value).OrElse(tc.orElse)
+			if _r != tc.result {
+				t.Fatalf(`result: {%s} but expected: {%s}`, _r, tc.result)
+			}
+		})
 	}
 }
 
@@ -37,21 +56,38 @@ func TestReplaceAll(t *testing.T) {
 
 // TestAppend calls stringsutil.When,
 // checking for a valid return value.
-func TestWhen(t *testing.T) {
-	_r := NewStringS("1").When("true", "false", func(s string) bool {
-		return s == "1"
-	})
-	if _r != "true" {
-		t.Fatalf(`result: {%s} but expected: {%s}`, _r, "true")
+func TestStringWhen(t *testing.T) {
+	tcs := []struct {
+		name   string
+		value  string
+		is     string
+		or     string
+		cond   func(string) bool
+		result string
+	}{
+		{
+			name:   "with value",
+			value:  "1",
+			is:     "true",
+			or:     "false",
+			cond:   func(s string) bool { return s == "1" },
+			result: "true",
+		},
+		{
+			name:   "with empty value",
+			value:  " ",
+			is:     "true",
+			or:     "false",
+			cond:   func(s string) bool { return s == "1" },
+			result: "false",
+		},
 	}
-
-	_r = NewStringS("Boby").When("Hello World", "Hello Boby", IsEmpty)
-	if _r != "Hello Boby" {
-		t.Fatalf(`result: {%s} but expected: {%s}`, _r, "Hello Boby")
-	}
-
-	_r = NewStringS("").When("Hello Boby", "Hello World", IsNotEmpty)
-	if _r != "Hello World" {
-		t.Fatalf(`result: {%s} but expected: {%s}`, _r, "Hello World")
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			_r := NewStringS(tc.value).When(tc.is, tc.or, tc.cond)
+			if _r != tc.result {
+				t.Fatalf(`result: {%s} but expected: {%s}`, _r, tc.result)
+			}
+		})
 	}
 }
