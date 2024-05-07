@@ -38,7 +38,7 @@ Find more examples on the [README.md (pkg/slicesutil)](pkg/slicesutil/README.md)
 
 ## Projects using `go-utils`
 
-* [CLI for Postman](https://github.com/joakim-ribier/go-cli-4Postman)
+* [CLI for Postman](https://github.com/joakim-ribier/gcli-4postman)
 
 ## License
 This software is licensed under the MIT license, see [License](https://github.com/joakim-ribier/go-utils/blob/main/LICENSE) for more information.

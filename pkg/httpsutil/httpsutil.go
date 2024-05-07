@@ -5,6 +5,8 @@ import (
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/joakim-ribier/go-utils/pkg/timesutil"
 )
 
 // HttpRequest struct helps to build the http.Request
@@ -15,10 +17,11 @@ type HttpRequest struct {
 
 // HttpResponse HTTP response
 type HttpResponse struct {
-	Status     string
-	StatusCode int
-
-	Body []byte
+	Status        string
+	StatusCode    int
+	ContentLength int64
+	TimeInMillis  int64
+	Body          []byte
 }
 
 // NewHttpRequest builds new http.Request object ('GET' by default)
@@ -80,20 +83,32 @@ func (r *HttpRequest) Call() (*HttpResponse, error) {
 		Timeout: timeout,
 	}
 
-	resp, err := client.Do(r.Req)
+	resp, err := timesutil.WithExecutionTime(func() (*http.Response, error) {
+		return client.Do(r.Req)
+	})
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer resp.T.Body.Close()
 
-	body, err := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.T.Body)
 	if err != nil {
 		return nil, err
 	}
 
 	return &HttpResponse{
-		Status:     resp.Status,
-		StatusCode: resp.StatusCode,
-		Body:       body,
+		Status:        resp.T.Status,
+		StatusCode:    resp.T.StatusCode,
+		Body:          body,
+		ContentLength: resp.T.ContentLength,
+		TimeInMillis:  resp.TimeInMillis,
 	}, nil
+}
+
+// TruncateBody transforms {r.Body} to string and truncates it with the {max}.
+func (r *HttpResponse) TruncateBody(max int) string {
+	if len(r.Body) > max {
+		return string(r.Body[:max])
+	}
+	return string(r.Body)
 }
