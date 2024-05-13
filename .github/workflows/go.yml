@@ -5,9 +5,12 @@ name: Go
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+      - '**/*_codecov'
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - '**/*_codecov'
 
 jobs:
 
@@ -29,3 +32,6 @@ jobs:
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }} # required
+        verbose: true # optional (default = false)
