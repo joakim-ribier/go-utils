@@ -4,9 +4,85 @@ import (
 	"testing"
 )
 
+// ##
+// #### string type functions ####
+// ##
+
+// TestAppend calls stringsutil.IsEmpty,
+// checking for a valid return value.
+func TestIsEmpty(t *testing.T) {
+	tcs := []struct {
+		name   string
+		value  string
+		result bool
+	}{
+		{
+			name:   "not empty",
+			value:  "not empty",
+			result: false,
+		},
+		{
+			name:   "with empty value",
+			value:  "",
+			result: true,
+		},
+		{
+			name:   "with space value",
+			value:  "   ",
+			result: true,
+		},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			_r := IsEmpty(tc.value)
+			if _r != tc.result {
+				t.Fatalf(`result: {%v} but expected: {%v}`, _r, tc.result)
+			}
+		})
+	}
+}
+
+// TestAppend calls stringsutil.IsNotEmpty,
+// checking for a valid return value.
+func TestIsNotEmpty(t *testing.T) {
+	tcs := []struct {
+		name   string
+		value  string
+		result bool
+	}{
+		{
+			name:   "not empty",
+			value:  "not empty",
+			result: true,
+		},
+		{
+			name:   "with empty value",
+			value:  "",
+			result: false,
+		},
+		{
+			name:   "with space value",
+			value:  "   ",
+			result: false,
+		},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			_r := IsNotEmpty(tc.value)
+			if _r != tc.result {
+				t.Fatalf(`result: {%v} but expected: {%v}`, _r, tc.result)
+			}
+		})
+	}
+}
+
+// ##
+// #### NewStringS type functions ####
+// ##
+
 // TestAppend calls stringsutil.OrElse,
 // checking for a valid return value.
-func TestStringOrElse(t *testing.T) {
+func TestOrElse(t *testing.T) {
 	tcs := []struct {
 		name   string
 		value  string
@@ -56,7 +132,7 @@ func TestReplaceAll(t *testing.T) {
 
 // TestAppend calls stringsutil.When,
 // checking for a valid return value.
-func TestStringWhen(t *testing.T) {
+func TestWhen(t *testing.T) {
 	tcs := []struct {
 		name   string
 		value  string
