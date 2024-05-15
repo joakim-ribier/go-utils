@@ -1,6 +1,10 @@
 package stringsutil
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/joakim-ribier/go-utils/pkg/genericsutil"
+)
 
 type stringS string
 
@@ -13,9 +17,9 @@ func NewStringS(s string) stringS {
 	return stringS(s)
 }
 
-// OrElse returns {s} if the value is not empty else returns {or}.
-func (s stringS) OrElse(or string) string {
-	return orElse(s.S(), or)
+// OrElse returns {s} if the value is not empty else returns {orIsEmpty}.
+func (s stringS) OrElse(orIsEmpty string) string {
+	return OrElse(s.S(), orIsEmpty)
 }
 
 // ReplaceAll replaces in {s} the {old} value by the {new} value.
@@ -28,23 +32,20 @@ func (s stringS) S() string {
 	return string(s)
 }
 
-// When returns {is} when the provided {cond} function returns true else returns {or}.
-func (s stringS) When(is, or string, cond func(string) bool) string {
-	if cond(string(s)) {
-		return is
-	}
-	return or
+// When returns {isTrue} when the provided {cond} function returns true else returns {isFalse}.
+func (s stringS) When(cond func(string) bool, isTrue, isFalse string) string {
+	return genericsutil.When(string(s), cond, isTrue, isFalse)
 }
 
 // ##
 // #### string type functions ####
 // ##
 
-func orElse(s, or string) string {
-	if IsEmpty(s) {
-		return or
-	}
-	return s
+// OrElse returns {s} if not empty else returns {orIsEmpty}.
+func OrElse(s, orIsEmpty string) string {
+	return genericsutil.OrElse(s, func() bool {
+		return IsNotEmpty(s)
+	}, orIsEmpty)
 }
 
 // IsEmpty returns true if {s} is empty else false.

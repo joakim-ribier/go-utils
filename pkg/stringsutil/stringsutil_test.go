@@ -142,7 +142,7 @@ func TestWhen(t *testing.T) {
 		result string
 	}{
 		{
-			name:   "with value",
+			name:   "convert int to bool",
 			value:  "1",
 			is:     "true",
 			or:     "false",
@@ -150,17 +150,25 @@ func TestWhen(t *testing.T) {
 			result: "true",
 		},
 		{
-			name:   "with empty value",
+			name:   "convert int to bool with none value",
 			value:  " ",
 			is:     "true",
 			or:     "false",
 			cond:   func(s string) bool { return s == "1" },
 			result: "false",
 		},
+		{
+			name:   "with empty value function",
+			value:  " ",
+			is:     "is empty",
+			or:     "not empty",
+			cond:   IsEmpty,
+			result: "is empty",
+		},
 	}
 	for _, tc := range tcs {
 		t.Run(tc.name, func(t *testing.T) {
-			_r := NewStringS(tc.value).When(tc.is, tc.or, tc.cond)
+			_r := NewStringS(tc.value).When(tc.cond, tc.is, tc.or)
 			if _r != tc.result {
 				t.Fatalf(`result: {%s} but expected: {%s}`, _r, tc.result)
 			}

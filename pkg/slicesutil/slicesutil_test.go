@@ -16,6 +16,16 @@ type UserTestMock struct {
 // #### sliceS type functions ####
 // ##
 
+// TestAppend calls slicesutil.NewSliceS,
+// checking for a valid return value.
+func TestNewSliceS(t *testing.T) {
+	_s := sliceS{"one", "three", "nine", "two"}
+	r := NewSliceS(_s)
+	if !Equal(_s, r) {
+		t.Fatalf(`result: {%v} but expected: {%v}`, false, true)
+	}
+}
+
 // TestAppend calls slicesutil.Append,
 // checking for a valid return value.
 func TestAppend(t *testing.T) {
