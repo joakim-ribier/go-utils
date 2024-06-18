@@ -123,14 +123,14 @@ func TestFindNextEl(t *testing.T) {
 // TestFindNextEl calls slicesutil.FindNextEl,
 // checking for a valid return value.
 func TestSort(t *testing.T) {
-	_s := sliceS{"one", "three", "nine", "two"}
+	_s := sliceS{"z", "p", "a", "m"}
 	r := _s.Sort()
 
-	if r[0] != "nine" {
-		t.Fatalf(`result: {%s} but expected: {%v}`, r, "nine")
+	if r[0] != "a" {
+		t.Fatalf(`result: {%s} but expected: {%v}`, r, "a")
 	}
-	if r[len(_s)-1] != "two" {
-		t.Fatalf(`result: {%s} but expected: {%v}`, r, "two")
+	if r[len(_s)-1] != "z" {
+		t.Fatalf(`result: {%s} but expected: {%v}`, r, "z")
 	}
 }
 
@@ -284,12 +284,20 @@ func TestFlatTransformT(t *testing.T) {
 // TestSortT calls slicesutil.SortT,
 // checking for a valid return value.
 func TestSortT(t *testing.T) {
-	_1 := []UserTestMock{{Name: "N-1", Age: 1}, {Name: "N-2", Age: 2}, {Name: "N-3", Age: 6}}
+	_1 := []UserTestMock{{Name: "N-3", Age: 6}, {Name: "N-1", Age: 1}, {Name: "N-2", Age: 2}}
 
-	r := SortT(_1, func(utm1, utm2 UserTestMock) bool { return utm1.Age > utm2.Age })
-	if _1[0].Age != 1 || r[0].Age != 6 || r[1].Age != 2 {
+	r := SortT(_1, func(utm1, utm2 UserTestMock) int {
+		switch {
+		case utm1.Age < utm2.Age:
+			return -1
+		case utm1.Age > utm2.Age:
+			return +1
+		}
+		return 0
+	})
+	if r[0].Age != 1 || r[2].Age != 6 {
 		t.Fatalf(`result: {%v} but expected: {%v}`, r,
-			[]UserTestMock{{Name: "N-3", Age: 6}, {Name: "N-2", Age: 2}, {Name: "N-1", Age: 1}})
+			[]UserTestMock{{Name: "N-1", Age: 1}, {Name: "N-2", Age: 2}, {Name: "N-3", Age: 6}})
 	}
 }
 

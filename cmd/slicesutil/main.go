@@ -133,13 +133,19 @@ func sortT() {
 	fmt.Println("\nSortT")
 
 	sort.SliceStable(users, func(i, j int) bool {
-		return users[i].Age > users[j].Age
+		return users[i].Age < users[j].Age
 	})
 	fmt.Printf("// R0: %v", users)
 
 	// new way to do with the lib -> clone and sort collections
-	users = slicesutil.SortT[User](getUsers(), func(u1, u2 User) bool {
-		return u1.Age > u2.Age
+	users = slicesutil.SortT[User](getUsers(), func(u1, u2 User) int {
+		switch {
+		case u1.Age < u2.Age:
+			return -1
+		case u1.Age > u2.Age:
+			return +1
+		}
+		return 0
 	})
 	fmt.Printf("\n// R1: %v", users)
 }

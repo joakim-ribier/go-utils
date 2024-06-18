@@ -2,7 +2,6 @@ package slicesutil
 
 import (
 	"slices"
-	"sort"
 	"strings"
 )
 
@@ -151,10 +150,15 @@ func FindNextEl(s []string, v string) string {
 
 // Sort sorts the slice {s} values.
 func Sort(s []string) []string {
-	sort.SliceStable(s, func(i, j int) bool {
-		return strings.ToLower(s[i]) < strings.ToLower(s[j])
+	return SortT(s, func(a, b string) int {
+		switch {
+		case strings.ToLower(a) < strings.ToLower(b):
+			return -1
+		case strings.ToLower(a) > strings.ToLower(b):
+			return +1
+		}
+		return 0
 	})
-	return s
 }
 
 // ##
@@ -221,11 +225,9 @@ func FlatTransformT[F any, T any](from []F, transform func(F) ([]T, error)) []T 
 }
 
 // SortT clones and sorts the slice {s} using the provided {less} function.
-func SortT[T any](s []T, less func(T, T) bool) []T {
+func SortT[T any](s []T, less func(T, T) int) []T {
 	var out = slices.Clone(s)
-	sort.SliceStable(out, func(i, j int) bool {
-		return less(s[i], s[j])
-	})
+	slices.SortStableFunc(out, func(a, b T) int { return less(a, b) })
 	return out
 }
 
