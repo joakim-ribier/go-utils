@@ -123,10 +123,10 @@ func TestFindNextEl(t *testing.T) {
 // TestFindNextEl calls slicesutil.FindNextEl,
 // checking for a valid return value.
 func TestSort(t *testing.T) {
-	_s := sliceS{"z", "p", "a", "m"}
+	_s := sliceS{"z", "p", "a", "m", "a"}
 	r := _s.Sort()
 
-	if r[0] != "a" {
+	if r[0] != "a" || r[1] != "a" {
 		t.Fatalf(`result: {%s} but expected: {%v}`, r, "a")
 	}
 	if r[len(_s)-1] != "z" {
