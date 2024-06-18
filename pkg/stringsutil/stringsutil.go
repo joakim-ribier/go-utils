@@ -57,3 +57,51 @@ func IsEmpty(s string) bool {
 func IsNotEmpty(s string) bool {
 	return !IsEmpty(s)
 }
+
+// Split slices {value} into all substrings separated by {sep} not enclosed by {enclose} character
+// and returns a slice of the substrings between those separators.
+//
+// Ex: Split(`Tom Hello Sam "How are you?" Tom Fine!, " ", `"`)
+// => ["Tom", "Hello", "Sam", "How are you?", "Tom", "Fine!"]
+func Split(value, sep, enclose string) []string {
+	quote := false
+	tab := []string{}
+	el := ""
+	for i, r := range strings.TrimSpace(value) {
+		add := false
+		concat := false
+		lastRune := ""
+		if i > 0 {
+			lastRune = string(value[i-1])
+		}
+		character := string(r)
+		if (character == enclose && lastRune != "\\") || quote {
+			if !quote {
+				quote = true
+			} else {
+				add = (character == enclose && lastRune != "\\") && quote
+				concat = true
+			}
+		} else {
+			if character == sep {
+				add = character == sep
+			} else {
+				concat = true
+			}
+		}
+		if add {
+			if len(el) > 0 && el != enclose && el != sep {
+				tab = append(tab, el)
+			}
+			el = ""
+			quote = false
+		}
+		if concat && (el != enclose || lastRune != "\\") && character != "\\" {
+			el = el + character
+		}
+	}
+	if len(el) > 0 && el != enclose {
+		tab = append(tab, el)
+	}
+	return tab
+}

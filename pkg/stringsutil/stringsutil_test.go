@@ -2,13 +2,15 @@ package stringsutil
 
 import (
 	"testing"
+
+	"github.com/joakim-ribier/go-utils/pkg/slicesutil"
 )
 
 // ##
 // #### string type functions ####
 // ##
 
-// TestAppend calls stringsutil.IsEmpty,
+// TestIsEmpty calls stringsutil.IsEmpty,
 // checking for a valid return value.
 func TestIsEmpty(t *testing.T) {
 	tcs := []struct {
@@ -42,7 +44,7 @@ func TestIsEmpty(t *testing.T) {
 	}
 }
 
-// TestAppend calls stringsutil.IsNotEmpty,
+// TestIsNotEmpty calls stringsutil.IsNotEmpty,
 // checking for a valid return value.
 func TestIsNotEmpty(t *testing.T) {
 	tcs := []struct {
@@ -80,7 +82,7 @@ func TestIsNotEmpty(t *testing.T) {
 // #### NewStringS type functions ####
 // ##
 
-// TestAppend calls stringsutil.OrElse,
+// TestOrElse calls stringsutil.OrElse,
 // checking for a valid return value.
 func TestOrElse(t *testing.T) {
 	tcs := []struct {
@@ -118,7 +120,7 @@ func TestOrElse(t *testing.T) {
 	}
 }
 
-// TestAppend calls stringsutil.ReplaceAll,
+// TestReplaceAll calls stringsutil.ReplaceAll,
 // checking for a valid return value.
 func TestReplaceAll(t *testing.T) {
 	_r := NewStringS("one two three four").
@@ -130,7 +132,7 @@ func TestReplaceAll(t *testing.T) {
 	}
 }
 
-// TestAppend calls stringsutil.When,
+// TestWhen calls stringsutil.When,
 // checking for a valid return value.
 func TestWhen(t *testing.T) {
 	tcs := []struct {
@@ -171,6 +173,72 @@ func TestWhen(t *testing.T) {
 			_r := NewStringS(tc.value).When(tc.cond, tc.is, tc.or)
 			if _r != tc.result {
 				t.Fatalf(`result: {%s} but expected: {%s}`, _r, tc.result)
+			}
+		})
+	}
+}
+
+// TestSplit calls stringsutil.Split,
+// checking for a valid return value.
+func TestSplit(t *testing.T) {
+	tcs := []struct {
+		name    string
+		value   string
+		sep     string
+		enclose string
+		result  []string
+	}{
+		{
+			name:    "split empty value",
+			value:   "",
+			sep:     " ",
+			enclose: `"`,
+			result:  []string{},
+		},
+		{
+			name:    "split one value",
+			value:   `:quit`,
+			sep:     " ",
+			enclose: `"`,
+			result:  []string{":quit"},
+		},
+		{
+			name:    "split and trim value",
+			value:   `  hello world  `,
+			sep:     " ",
+			enclose: `"`,
+			result:  []string{"hello", "world"},
+		},
+		{
+			name:    "do not split or trim enclosed value",
+			value:   `" hello   world "`,
+			sep:     " ",
+			enclose: `"`,
+			result:  []string{" hello   world "},
+		},
+		{
+			name:    "split complex string",
+			value:   `Tom Hello Sam "How are you?" Tom Fine! Sam "Bye bye"`,
+			sep:     " ",
+			enclose: `"`,
+			result:  []string{"Tom", "Hello", "Sam", "How are you?", "Tom", "Fine!", "Sam", "Bye bye"},
+		},
+		{
+			name:    "split json string",
+			value:   "'curl -X POST' -d '{\"value\":\"my value\"}'",
+			sep:     " ",
+			enclose: `'`,
+			result: []string{
+				"curl -X POST",
+				"-d",
+				`{"value":"my value"}`},
+		},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			_r := Split(tc.value, tc.sep, tc.enclose)
+			if !slicesutil.Must(_r, tc.result) {
+				t.Fatalf(`result: {%v} but expected: {%v}`, _r, tc.result)
 			}
 		})
 	}
