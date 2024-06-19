@@ -283,6 +283,45 @@ func TestFlatTransformT(t *testing.T) {
 	}
 }
 
+// TestForAllT calls slicesutil.ForAllT,
+// checking for a valid return value.
+func TestForAllT(t *testing.T) {
+
+	tcs := []struct {
+		name      string
+		value     []string
+		predicate func(string) bool
+		result    bool
+	}{
+		{
+			name:      "with empty slices",
+			value:     []string{},
+			predicate: func(s string) bool { return false },
+			result:    true,
+		},
+		{
+			name:      "all values fulfill the predicate",
+			value:     []string{"a", "b", "c"},
+			predicate: func(s string) bool { return len(s) == 1 },
+			result:    true,
+		},
+		{
+			name:      "not all values fulfill the predicate",
+			value:     []string{"a", "b", "c"},
+			predicate: func(s string) bool { return s == "a" },
+			result:    false,
+		},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			_r := ForAllT(tc.value, tc.predicate)
+			if _r != tc.result {
+				t.Fatalf(`%s: {%v} but expected {%v}`, tc.name, _r, tc.result)
+			}
+		})
+	}
+}
+
 // TestSortT calls slicesutil.SortT,
 // checking for a valid return value.
 func TestSortT(t *testing.T) {

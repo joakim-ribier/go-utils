@@ -220,6 +220,18 @@ func FlatTransformT[F any, T any](from []F, transform func(F) ([]T, error)) []T 
 	return to
 }
 
+// ForAllT returns true if all the elements fulfil the predicate.
+func ForAllT[T any](in []T, predicate func(T) bool) bool {
+	is := true
+	for _, v := range in {
+		is := predicate(v)
+		if !is {
+			return false
+		}
+	}
+	return is
+}
+
 // SortT clones and sorts the slice {s} using the provided {get} function.
 func SortT[T any, E cmp.Ordered](s []T, get func(T, T) (E, E)) []T {
 	var out = slices.Clone(s)
