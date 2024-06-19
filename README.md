@@ -15,6 +15,32 @@ Run `$ go get github.com/joakim-ribier/go-utils` to add this library on your pro
 
 Otherwise, you can download it and start `$ go build ./...` to work on.
 
+### slicesutil
+
+```go
+// []User --> []User
+slicesutil.FilterT[User](users, func(u User) bool {
+	return u.Age > 17
+})
+
+// []User --> *User
+slicesutil.FindT[User](users, func(u User) bool {
+	return u.Age == 2
+})
+
+// []User --> []User
+slicesutil.SortT[User, int](_1, func(a, b User) (int, int) {
+	return a.Age, b.Age
+})
+
+// []User --> []string
+slicesutil.TransformT[User, string](users, func(u User) (*string, error) {
+	return &u.Name, nil
+})
+````
+
+Find more examples on the [README.md (pkg/slicesutil)](pkg/slicesutil/README.md).
+
 ## Test and Coverage
 
 ```go
@@ -29,27 +55,6 @@ ok  	github.com/joakim-ribier/go-utils/pkg/slicesutil	1.783s	coverage: 100.0% of
 ok  	github.com/joakim-ribier/go-utils/pkg/stringsutil	1.690s	coverage: 100.0% of statements
 ok  	github.com/joakim-ribier/go-utils/pkg/timesutil	2.370s	coverage: 100.0% of statements
 ```
-
-### slicesutil
-
-```go
-// []User --> []User
-slicesutil.FilterT[User](users, func(u User) bool {
-	return u.Age > 17
-})
-
-// []User --> *User
-slicesutil.FindT[User](users, func(u User) bool {
-	return u.Age == 2
-})
-
-// []User --> []string
-slicesutil.TransformT[User, string](users, func(u User) (*string, error) {
-	return &u.Name, nil
-})
-````
-
-Find more examples on the [README.md (pkg/slicesutil)](pkg/slicesutil/README.md).
 
 ## Projects using `go-utils`
 

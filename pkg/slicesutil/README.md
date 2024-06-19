@@ -86,9 +86,9 @@ sort.SliceStable(users, func(i, j int) bool {
 })
 
 // new way (clone and sort values)
-users = slicesutil.SortT[User](getUsers(), func(u1, u2 User) bool {
-	return u1.Age > u2.Age
-}) // Result: [{3 3 Name 3} {2 2 Name 2} {1 1 Name 1}]
+users = slicesutil.SortT[User](getUsers(), func(u1, u2 User) (int, int)) {
+	return u1.Age, u2.Age
+}) // Result: [{1 1 Name 1} {2 2 Name 2} {3 3 Name 3} ]
 ```
 
 #### ToStringT

@@ -4,12 +4,14 @@ import (
 	"slices"
 	"strconv"
 	"testing"
+	"time"
 )
 
 type UserTestMock struct {
-	Age     int
-	Name    string
-	Hobbies []string
+	Age       int
+	Name      string
+	Hobbies   []string
+	CreatedAt time.Time
 }
 
 // ##
@@ -286,18 +288,48 @@ func TestFlatTransformT(t *testing.T) {
 func TestSortT(t *testing.T) {
 	_1 := []UserTestMock{{Name: "N-3", Age: 6}, {Name: "N-1", Age: 1}, {Name: "N-2", Age: 2}}
 
-	r := SortT(_1, func(utm1, utm2 UserTestMock) int {
-		switch {
-		case utm1.Age < utm2.Age:
-			return -1
-		case utm1.Age > utm2.Age:
-			return +1
-		}
-		return 0
+	r := SortT(_1, func(utm1, utm2 UserTestMock) (int, int) {
+		return utm1.Age, utm2.Age
 	})
 	if r[0].Age != 1 || r[2].Age != 6 {
 		t.Fatalf(`result: {%v} but expected: {%v}`, r,
 			[]UserTestMock{{Name: "N-1", Age: 1}, {Name: "N-2", Age: 2}, {Name: "N-3", Age: 6}})
+	}
+}
+
+// TestSortTByTime calls slicesutil.SortTByTime,
+// checking for a valid return value.
+func TestSortTByTime(t *testing.T) {
+	getTime := func(v string) time.Time {
+		t, _ := time.Parse("2006-01-02", v)
+		return t
+	}
+
+	_1 := []UserTestMock{
+		{Name: "N-3", CreatedAt: getTime("2024-01-01")},
+		{Name: "N-1", CreatedAt: getTime("2020-01-01")},
+		{Name: "N-2", CreatedAt: getTime("2022-01-01")}}
+
+	r := SortTByTime(_1, func(utm1, utm2 UserTestMock) (time.Time, time.Time) {
+		return utm1.CreatedAt, utm2.CreatedAt
+	})
+	if r[0].Name != "N-1" || r[2].Name != "N-3" {
+		t.Fatalf(`result: {%v} but expected: {%v}`, r,
+			[]UserTestMock{
+				{Name: "N-1", CreatedAt: getTime("2020-01-01")},
+				{Name: "N-2", CreatedAt: getTime("2022-01-01")},
+				{Name: "N-3", CreatedAt: getTime("2024-01-01")}})
+	}
+
+	r = SortTByTime(_1, func(utm1, utm2 UserTestMock) (time.Time, time.Time) {
+		return utm2.CreatedAt, utm1.CreatedAt
+	})
+	if r[0].Name != "N-3" || r[2].Name != "N-1" {
+		t.Fatalf(`result: {%v} but expected: {%v}`, r,
+			[]UserTestMock{
+				{Name: "N-3", CreatedAt: getTime("2024-01-01")},
+				{Name: "N-2", CreatedAt: getTime("2022-01-01")},
+				{Name: "N-1", CreatedAt: getTime("2020-01-01")}})
 	}
 }
 

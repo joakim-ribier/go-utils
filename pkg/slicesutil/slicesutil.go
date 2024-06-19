@@ -1,8 +1,10 @@
 package slicesutil
 
 import (
+	"cmp"
 	"slices"
 	"strings"
+	"time"
 )
 
 type sliceS []string
@@ -150,14 +152,8 @@ func FindNextEl(s []string, v string) string {
 
 // Sort sorts the slice {s} values.
 func Sort(s []string) []string {
-	return SortT(s, func(a, b string) int {
-		switch {
-		case strings.ToLower(a) < strings.ToLower(b):
-			return -1
-		case strings.ToLower(a) > strings.ToLower(b):
-			return +1
-		}
-		return 0
+	return SortT(s, func(a, b string) (string, string) {
+		return strings.ToLower(a), strings.ToLower(b)
 	})
 }
 
@@ -224,10 +220,29 @@ func FlatTransformT[F any, T any](from []F, transform func(F) ([]T, error)) []T 
 	return to
 }
 
-// SortT clones and sorts the slice {s} using the provided {less} function.
-func SortT[T any](s []T, less func(T, T) int) []T {
+// SortT clones and sorts the slice {s} using the provided {get} function.
+func SortT[T any, E cmp.Ordered](s []T, get func(T, T) (E, E)) []T {
 	var out = slices.Clone(s)
-	slices.SortStableFunc(out, func(a, b T) int { return less(a, b) })
+	slices.SortStableFunc(out, func(a, b T) int {
+		f1, f2 := get(a, b)
+		switch {
+		case f1 < f2:
+			return -1
+		case f1 > f2:
+			return +1
+		}
+		return 0
+	})
+	return out
+}
+
+// SortTByTime clones and sorts the slice {s} by time.Time type using the provided {get} function.
+func SortTByTime[T any](s []T, get func(T, T) (time.Time, time.Time)) []T {
+	var out = slices.Clone(s)
+	slices.SortStableFunc(out, func(a, b T) int {
+		t1, t2 := get(a, b)
+		return t1.Compare(t2)
+	})
 	return out
 }
 
