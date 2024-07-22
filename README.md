@@ -7,6 +7,8 @@
 
 Go library that provides utilities functions to manipulate slices type, json serialization, io, and http calls.
 
+[Usage](#usage) - [Test](#test) - [Thanks](#thanks-to) - [License](#license)
+
 ## Usage
 
 The main goal is to make code cooler to write in implementations, have fun coding and discover a new language!
@@ -41,24 +43,30 @@ slicesutil.TransformT[User, string](users, func(u User) (*string, error) {
 
 Find more examples on the [README.md (pkg/slicesutil)](pkg/slicesutil/README.md).
 
-## Test and Coverage
+## Test
 
-```go
+```bash
 $ go test ./... -race -covermode=atomic -coverprofile=coverage.out
 ...
-ok  	github.com/joakim-ribier/go-utils/pkg/cryptosutil	1.480s	coverage: 80.0% of statements
-ok  	github.com/joakim-ribier/go-utils/pkg/genericsutil	1.396s	coverage: 100.0% of statements
-ok  	github.com/joakim-ribier/go-utils/pkg/httpsutil	2.066s	coverage: 37.5% of statements
-ok  	github.com/joakim-ribier/go-utils/pkg/iosutil	1.866s	coverage: 100.0% of statements
-ok  	github.com/joakim-ribier/go-utils/pkg/jsonsutil	1.965s	coverage: 100.0% of statements
-ok  	github.com/joakim-ribier/go-utils/pkg/slicesutil	1.783s	coverage: 100.0% of statements
-ok  	github.com/joakim-ribier/go-utils/pkg/stringsutil	1.690s	coverage: 100.0% of statements
-ok  	github.com/joakim-ribier/go-utils/pkg/timesutil	2.370s	coverage: 100.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/cryptosutil	1.644s	coverage: 80.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/genericsutil	1.866s	coverage: 100.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/httpsutil	3.138s	coverage: 80.6% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/iosutil	2.274s	coverage: 100.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/jsonsutil	2.454s	coverage: 100.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/slicesutil	2.088s	coverage: 100.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/stringsutil	1.877s	coverage: 100.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/timesutil	3.421s	coverage: 100.0% of statements
 ```
 
 ## Projects using `go-utils`
 
-* [CLI for Postman](https://github.com/joakim-ribier/gcli-4postman)
+* [CLI-4Postman - Command Line Interface (CLI) for Postman](https://github.com/joakim-ribier/gcli-4postman)
+* [Gmocky-v2 - The easiest way to test your web services securely and privately using a Docker container](https://github.com/joakim-ribier/gmocky-v2)
+
+## Thanks to
+
+* [Dockertest - Write better integration tests!](https://github.com/ory/dockertest)
+* [Gmocky-v2 - The easiest way to test your web services securely and privately using a Docker container](https://github.com/joakim-ribier/gmocky-v2)
 
 ## License
 This software is licensed under the MIT license, see [License](https://github.com/joakim-ribier/go-utils/blob/main/LICENSE) for more information.

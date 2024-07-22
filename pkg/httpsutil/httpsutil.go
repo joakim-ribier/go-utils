@@ -12,7 +12,7 @@ import (
 // HttpRequest struct helps to build the http.Request
 type HttpRequest struct {
 	Req     *http.Request
-	timeout int
+	timeout time.Duration
 }
 
 // HttpResponse HTTP response
@@ -25,14 +25,20 @@ type HttpResponse struct {
 }
 
 // NewHttpRequest builds new http.Request object ('GET' by default)
-func NewHttpRequest(url string, body string) (*HttpRequest, error) {
-	req, err := http.NewRequest("GET", url, bytes.NewBuffer([]byte(body)))
+func NewHttpRequest(url, body string) (*HttpRequest, error) {
+	method := "GET"
+	if len(body) > 0 {
+		method = "POST"
+	}
+
+	req, err := http.NewRequest(method, url, bytes.NewBuffer([]byte(body)))
 	if err != nil {
 		return nil, err
 	}
+
 	return &HttpRequest{
 		Req:     req,
-		timeout: 15,
+		timeout: 15 * time.Millisecond,
 	}, nil
 }
 
@@ -68,20 +74,23 @@ func (r *HttpRequest) Headers(params map[string]string) *HttpRequest {
 	return r
 }
 
-// Timeout sets a timeout in seconds
-func (r *HttpRequest) Timeout(seconds int) *HttpRequest {
-	if seconds > -1 {
-		r.timeout = seconds
+// Timeout sets a timeout, a {timeout} of zero means no timeout
+func (r *HttpRequest) Timeout(timeout string) *HttpRequest {
+	if v, err := time.ParseDuration(timeout); err == nil {
+		r.timeout = v
 	}
+	return r
+}
+
+// NoTimeout sets a timeout of zero
+func (r *HttpRequest) NoTimeout() *HttpRequest {
+	r.timeout = 0
 	return r
 }
 
 // Call sends the HTTP request and returns the HTTP response
 func (r *HttpRequest) Call() (*HttpResponse, error) {
-	timeout := time.Duration(r.timeout) * time.Second
-	client := &http.Client{
-		Timeout: timeout,
-	}
+	client := &http.Client{Timeout: r.timeout}
 
 	resp, err := timesutil.WithExecutionTime(func() (*http.Response, error) {
 		return client.Do(r.Req)
