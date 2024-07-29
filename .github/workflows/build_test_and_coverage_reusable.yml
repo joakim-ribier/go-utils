@@ -1,18 +1,14 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
-name: Go
+name: Build test and coverage (reusable)
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - '*'
+  workflow_call:
+    inputs:
+      coverage:
+        required: true
+        type: boolean
 
 jobs:
-  build:
+  build_test_and_coverage:
     runs-on: ubuntu-latest
     services:
       gmocky:
@@ -42,6 +38,7 @@ jobs:
         ENV_MODE: ci
 
     - name: Upload coverage to Codecov
+      if: ${{ inputs.coverage }}
       uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }} # required

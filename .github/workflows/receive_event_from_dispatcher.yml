@@ -1,0 +1,11 @@
+name: Receive repository dispatch 'build_and_test' event
+
+on:
+  repository_dispatch:
+    types: ['trigger-from-event:build_and_test']
+
+jobs:
+  run_from_event:
+    uses: ./.github/workflows/build_test_and_coverage_reusable.yml
+    with:
+      coverage: false

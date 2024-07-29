@@ -1,0 +1,15 @@
+name: Build test and coverage
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  run:
+    uses: ./.github/workflows/build_test_and_coverage_reusable.yml
+    with:
+      coverage: true
