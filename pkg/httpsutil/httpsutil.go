@@ -2,6 +2,7 @@ package httpsutil
 
 import (
 	"bytes"
+	"crypto/tls"
 	"io"
 	"net/http"
 	"time"
@@ -11,8 +12,10 @@ import (
 
 // HttpRequest struct helps to build the http.Request
 type HttpRequest struct {
-	Req     *http.Request
-	timeout time.Duration
+	Req                *http.Request
+	timeout            time.Duration
+	insecureSkipVerify bool
+	transport          http.RoundTripper
 }
 
 // HttpResponse HTTP response
@@ -37,15 +40,16 @@ func NewHttpRequest(url, body string) (*HttpRequest, error) {
 	}
 
 	return &HttpRequest{
-		Req:     req,
-		timeout: 15 * time.Millisecond,
+		Req:                req,
+		timeout:            15 * time.Second,
+		insecureSkipVerify: false,
+		transport:          nil,
 	}, nil
 }
 
 // AsJson adds "Content-Type: application/json" header
 func (r *HttpRequest) AsJson() *HttpRequest {
-	r.Headers(map[string]string{"Content-Type": "application/json"})
-	return r
+	return r.Header("Content-Type", "application/json")
 }
 
 // Header adds new header
@@ -88,9 +92,38 @@ func (r *HttpRequest) NoTimeout() *HttpRequest {
 	return r
 }
 
+// InsecureSkipVerify sets {insecureSkipVerify} to {true}
+func (r *HttpRequest) InsecureSkipVerify() *HttpRequest {
+	r.insecureSkipVerify = true
+	return r
+}
+
+// Transport sets a {transport} value
+func (r *HttpRequest) Transport(t *http.Transport) *HttpRequest {
+	r.transport = t
+	return r
+}
+
+func (r *HttpRequest) getTransport() http.RoundTripper {
+	var transport http.RoundTripper = nil
+	if t := r.transport; t != nil {
+		transport = t
+	} else {
+		if r.insecureSkipVerify {
+			transport = &http.Transport{
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+			}
+		}
+	}
+	return transport
+}
+
 // Call sends the HTTP request and returns the HTTP response
 func (r *HttpRequest) Call() (*HttpResponse, error) {
-	client := &http.Client{Timeout: r.timeout}
+	client := &http.Client{
+		Timeout:   r.timeout,
+		Transport: r.getTransport(),
+	}
 
 	resp, err := timesutil.WithExecutionTime(func() (*http.Response, error) {
 		return client.Do(r.Req)

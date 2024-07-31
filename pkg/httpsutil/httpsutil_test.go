@@ -72,6 +72,20 @@ func TestMain(m *testing.M) {
 	}
 }
 
+// TestCallHTTPS calls a https URL,
+// checking for a valid return value.
+func TestCallHTTPS(t *testing.T) {
+	req, err := NewHttpRequest("https://go.dev/", "")
+	if err != nil {
+		t.Fatalf("Could not build a http request struct: %s", err)
+	}
+
+	resp, _ := req.InsecureSkipVerify().Call()
+	if resp.StatusCode != 200 || err != nil {
+		t.Errorf(`result: {%d} but expected: {%s}`, resp.StatusCode, "200")
+	}
+}
+
 // TestCall calls httpsutil.NewHttpRequest(string, string).Call(),
 // checking for a valid return value.
 func TestCall(t *testing.T) {
