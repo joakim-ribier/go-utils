@@ -1,6 +1,7 @@
 package stringsutil
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/joakim-ribier/go-utils/pkg/genericsutil"
@@ -41,11 +42,19 @@ func (s stringS) When(cond func(string) bool, isTrue, isFalse string) string {
 // #### string type functions ####
 // ##
 
-// OrElse returns {s} if not empty else returns {orIsEmpty}.
-func OrElse(s, orIsEmpty string) string {
-	return genericsutil.OrElse(s, func() bool {
-		return IsNotEmpty(s)
-	}, orIsEmpty)
+// Bool converts {in} string to boolean value
+func Bool(in string) bool {
+	return genericsutil.When(in, func(arg string) bool {
+		return arg == "true" || arg == "1"
+	}, true, false)
+}
+
+// Int converts {in} string to int value
+func Int(in string, or int) int {
+	if v, err := strconv.Atoi(in); err == nil {
+		return v
+	}
+	return or
 }
 
 // IsEmpty returns true if {s} is empty else false.
@@ -56,6 +65,13 @@ func IsEmpty(s string) bool {
 // IsNotEmpty returns true if {s} is not empty else false.
 func IsNotEmpty(s string) bool {
 	return !IsEmpty(s)
+}
+
+// OrElse returns {s} if not empty else returns {orIsEmpty}.
+func OrElse(s, orIsEmpty string) string {
+	return genericsutil.OrElse(s, func() bool {
+		return IsNotEmpty(s)
+	}, orIsEmpty)
 }
 
 // Split slices {value} into all substrings separated by {sep} not enclosed by {enclose} character

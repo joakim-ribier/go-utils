@@ -10,6 +10,87 @@ import (
 // #### string type functions ####
 // ##
 
+// TestBool calls stringsutil.Bool,
+// checking for a valid return value.
+func TestBool(t *testing.T) {
+	tcs := []struct {
+		name   string
+		value  string
+		result bool
+	}{
+		{
+			name:   "not boolean",
+			value:  "value",
+			result: false,
+		},
+		{
+			name:   "with empty value",
+			value:  "",
+			result: false,
+		},
+		{
+			name:   "true",
+			value:  "true",
+			result: true,
+		},
+		{
+			name:   "1",
+			value:  "1",
+			result: true,
+		},
+		{
+			name:   "false",
+			value:  "false",
+			result: false,
+		},
+		{
+			name:   "0",
+			value:  "0",
+			result: false,
+		},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			_r := Bool(tc.value)
+			if _r != tc.result {
+				t.Fatalf(`result: {%v} but expected: {%v}`, _r, tc.result)
+			}
+		})
+	}
+}
+
+// TestInt calls stringsutil.Int,
+// checking for a valid return value.
+func TestInt(t *testing.T) {
+	tcs := []struct {
+		name   string
+		value  string
+		or     int
+		result int
+	}{
+		{
+			name:   "not int",
+			value:  "value",
+			or:     -1,
+			result: -1,
+		},
+		{
+			name:   "with int value",
+			value:  "100",
+			or:     -1,
+			result: 100,
+		},
+	}
+	for _, tc := range tcs {
+		t.Run(tc.name, func(t *testing.T) {
+			_r := Int(tc.value, tc.or)
+			if _r != tc.result {
+				t.Fatalf(`result: {%v} but expected: {%v}`, _r, tc.result)
+			}
+		})
+	}
+}
+
 // TestIsEmpty calls stringsutil.IsEmpty,
 // checking for a valid return value.
 func TestIsEmpty(t *testing.T) {
