@@ -2,7 +2,12 @@ module github.com/joakim-ribier/go-utils
 
 go 1.22.5
 
-require github.com/ory/dockertest v3.3.5+incompatible
+require (
+	github.com/ory/dockertest v3.3.5+incompatible
+	go.uber.org/zap v1.26.0
+)
+
+require go.uber.org/multierr v1.10.0 // indirect
 
 require (
 	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
@@ -12,6 +17,8 @@ require (
 	github.com/containerd/continuity v0.4.3 // indirect
 	github.com/docker/go-connections v0.5.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
+	github.com/go-logr/logr v1.4.2
+	github.com/go-logr/zapr v1.3.0
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/gotestyourself/gotestyourself v2.2.0+incompatible // indirect
 	github.com/lib/pq v1.10.9 // indirect
