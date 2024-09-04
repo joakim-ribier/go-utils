@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     services:
       gmocky:
-        image: joakimribier/gmocky-v2
+        image: joakimribier/mockapic
         env:
-          GMOCKY_PORT: 3333
+          MOCKAPIC_PORT: 3333
         ports:
           - 3333:3333
 

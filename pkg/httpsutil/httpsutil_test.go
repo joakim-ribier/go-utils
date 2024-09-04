@@ -34,9 +34,9 @@ func TestMain(m *testing.M) {
 		}
 
 		resource, err := pool.RunWithOptions(&dockertest.RunOptions{
-			Repository:   "joakimribier/gmocky-v2",
+			Repository:   "joakimribier/mockapic",
 			Tag:          "latest",
-			Env:          []string{"GMOCKY_PORT=3333"},
+			Env:          []string{"MOCKAPIC_PORT=3333"},
 			ExposedPorts: []string{"3333"},
 		}, func(config *docker.HostConfig) {
 			// set AutoRemove to true so that stopped container goes away by itself
@@ -58,7 +58,7 @@ func TestMain(m *testing.M) {
 			_, err = req.Timeout("150ms").Call()
 			return err
 		}); err != nil {
-			log.Fatalf("Could not connect to gmocky-v2 server: %s", err)
+			log.Fatalf("Could not connect to mockapic server: %s", err)
 		}
 
 		code := m.Run()

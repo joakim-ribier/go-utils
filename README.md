@@ -61,12 +61,12 @@ ok  	github.com/joakim-ribier/go-utils/pkg/timesutil	3.421s	coverage: 100.0% of 
 ## Projects using `go-utils`
 
 * [CLI-4Postman - Command Line Interface (CLI) for Postman](https://github.com/joakim-ribier/gcli-4postman)
-* [Gmocky-v2 - The easiest way to test your web services securely and privately using a Docker container](https://github.com/joakim-ribier/gmocky-v2)
+* [Mockapic - The easiest way to test your web services securely and privately using a Docker container](https://github.com/joakim-ribier/mockapic)
 
 ## Thanks to
 
 * [Dockertest - Write better integration tests!](https://github.com/ory/dockertest)
-* [Gmocky-v2 - The easiest way to test your web services securely and privately using a Docker container](https://github.com/joakim-ribier/gmocky-v2)
+* [Mockapic - The easiest way to test your web services securely and privately using a Docker container](https://github.com/joakim-ribier/mockapic)
 
 ## License
 This software is licensed under the MIT license, see [License](https://github.com/joakim-ribier/go-utils/blob/main/LICENSE) for more information.
