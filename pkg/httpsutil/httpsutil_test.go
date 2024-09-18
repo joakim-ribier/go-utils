@@ -157,12 +157,7 @@ func TestCallAndTruncateBody(t *testing.T) {
 }
 
 func createNewRequest(hostAndPort string, method string, status int, body string) string {
-	httpRequest, err := NewHttpRequest(fmt.Sprintf("http://%s/v1/new", hostAndPort), fmt.Sprintf(`{
-    	"status": %d,
-    	"contentType": "text/plain",
-    	"charset": "UTF-8",
-    	"body": "%s"
-	}`, status, body))
+	httpRequest, err := NewHttpRequest(fmt.Sprintf("http://%s/v1/new?status=%d&contentType=text/plain&charset=UTF-8", hostAndPort, status), body)
 	if err != nil {
 		log.Fatalf("Could not create a http server: %s", err)
 	}
