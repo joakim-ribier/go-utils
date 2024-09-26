@@ -172,5 +172,5 @@ func createNewRequest(hostAndPort string, method string, status int, body string
 	}
 
 	values, _ := jsonsutil.Unmarshal[map[string]interface{}](httpResponse.Body)
-	return values["uuid"].(string)
+	return values["id"].(string)
 }
