@@ -69,7 +69,7 @@ func IsNotEmpty(s string) bool {
 
 // OrElse returns {s} if not empty else returns {orIsEmpty}.
 func OrElse(s, orIsEmpty string) string {
-	return genericsutil.OrElse(s, func() bool {
+	return genericsutil.OrElse(s, func(s string) bool {
 		return IsNotEmpty(s)
 	}, orIsEmpty)
 }

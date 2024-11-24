@@ -48,14 +48,16 @@ Find more examples on the [README.md (pkg/slicesutil)](pkg/slicesutil/README.md)
 ```bash
 $ go test ./... -race -covermode=atomic -coverprofile=coverage.out
 ...
-ok  	github.com/joakim-ribier/go-utils/pkg/cryptosutil	1.644s	coverage: 80.0% of statements
-ok  	github.com/joakim-ribier/go-utils/pkg/genericsutil	1.866s	coverage: 100.0% of statements
-ok  	github.com/joakim-ribier/go-utils/pkg/httpsutil	3.138s	coverage: 80.6% of statements
-ok  	github.com/joakim-ribier/go-utils/pkg/iosutil	2.274s	coverage: 100.0% of statements
-ok  	github.com/joakim-ribier/go-utils/pkg/jsonsutil	2.454s	coverage: 100.0% of statements
-ok  	github.com/joakim-ribier/go-utils/pkg/slicesutil	2.088s	coverage: 100.0% of statements
-ok  	github.com/joakim-ribier/go-utils/pkg/stringsutil	1.877s	coverage: 100.0% of statements
-ok  	github.com/joakim-ribier/go-utils/pkg/timesutil	3.421s	coverage: 100.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/cryptosutil	1.700s	coverage: 80.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/genericsutil	1.900s	coverage: 100.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/httpsutil	3.537s	coverage: 82.2% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/iosutil	2.425s	coverage: 100.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/jsonsutil	2.247s	coverage: 100.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/logsutil	2.140s	coverage: 100.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/mapsutil	2.580s	coverage: 100.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/slicesutil	2.953s	coverage: 100.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/stringsutil	2.770s	coverage: 100.0% of statements
+ok  	github.com/joakim-ribier/go-utils/pkg/timesutil	3.880s	coverage: 100.0% of statements
 ```
 
 ## Projects using `go-utils`
