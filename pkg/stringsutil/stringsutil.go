@@ -35,7 +35,9 @@ func (s stringS) S() string {
 
 // When returns {isTrue} when the provided {cond} function returns true else returns {isFalse}.
 func (s stringS) When(cond func(string) bool, isTrue, isFalse string) string {
-	return genericsutil.When(string(s), cond, isTrue, isFalse)
+	return genericsutil.When[string, string](string(s), cond,
+		func(s string) string { return isTrue },
+		func() string { return isFalse })
 }
 
 // ##
@@ -44,9 +46,9 @@ func (s stringS) When(cond func(string) bool, isTrue, isFalse string) string {
 
 // Bool converts {in} string to boolean value
 func Bool(in string) bool {
-	return genericsutil.When(in, func(arg string) bool {
+	return genericsutil.When[string, bool](in, func(arg string) bool {
 		return arg == "true" || arg == "1"
-	}, true, false)
+	}, func(s string) bool { return true }, func() bool { return false })
 }
 
 // Int converts {in} string to int value
@@ -69,9 +71,9 @@ func IsNotEmpty(s string) bool {
 
 // OrElse returns {s} if not empty else returns {orIsEmpty}.
 func OrElse(s, orIsEmpty string) string {
-	return genericsutil.OrElse(s, func(s string) bool {
+	return genericsutil.OrElse[string](s, func(s string) bool {
 		return IsNotEmpty(s)
-	}, orIsEmpty)
+	}, func() string { return orIsEmpty })
 }
 
 // Split slices {value} into all substrings separated by {sep} not enclosed by {enclose} character

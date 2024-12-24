@@ -17,6 +17,17 @@ Run `$ go get github.com/joakim-ribier/go-utils` to add this library on your pro
 
 Otherwise, you can download it and start `$ go build ./...` to work on.
 
+### genericsutil
+
+```go
+// []User --> *User
+genericsutil.When[[]User, *User](
+	extractUsers(),
+	func(utm []User) bool { return len(utm) > 0 },
+	func(utm []User) *User { return &utm[0] },
+	func() *User { return nil })
+```
+
 ### slicesutil
 
 ```go

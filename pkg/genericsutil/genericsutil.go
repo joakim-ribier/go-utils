@@ -1,19 +1,19 @@
 package genericsutil
 
 // OrElse returns {value} when the provided {predicate} function returns true else returns {orIsFalse}.
-func OrElse[T any](value T, predicate func(T) bool, orIsFalse T) T {
+func OrElse[T any](value T, predicate func(T) bool, orIsFalse func() T) T {
 	if predicate(value) {
 		return value
 	}
-	return orIsFalse
+	return orIsFalse()
 }
 
 // When returns {isTrue} when the provided {predicate} function returns true else returns {isFalse} value.
-func When[T any, R any](value T, predicate func(T) bool, isTrue, isFalse R) R {
+func When[T any, R any](value T, predicate func(T) bool, isTrue func(T) R, isFalse func() R) R {
 	if predicate(value) {
-		return isTrue
+		return isTrue(value)
 	}
-	return isFalse
+	return isFalse()
 }
 
 // ForAll returns {true} if each value respects the provided {predicate] function.
