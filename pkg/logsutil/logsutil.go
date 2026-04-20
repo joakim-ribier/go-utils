@@ -31,13 +31,25 @@ func (l Logger) Namespace(value string) Logger {
 // NewLogger builds and returns its own log struct which contains
 // an implementation of {zap.SugaredLogger} library
 func NewLogger(fileLog, appName string) (*Logger, error) {
-	config := zap.NewDevelopmentConfig()
+	return NewLoggerEnv(fileLog, appName, "dev")
+}
 
-	config.OutputPaths = []string{fileLog}
+// NewLoggerEnv builds and returns its own log struct which contains
+// an implementation of {zap.SugaredLogger} library
+func NewLoggerEnv(fileLog, appName string, env string) (*Logger, error) {
+	config := zap.NewDevelopmentConfig()
+	if env != "dev" {
+		config = zap.NewProductionConfig()
+	}
+	if len(fileLog) > 0 {
+		config.OutputPaths = []string{fileLog}
+	}
+
 	zapLog, err := config.Build()
 	if err != nil {
 		return nil, err
 	}
+	defer zapLog.Sync()
 
 	log := zapr.NewLogger(zapLog).WithValues("app", appName)
 
